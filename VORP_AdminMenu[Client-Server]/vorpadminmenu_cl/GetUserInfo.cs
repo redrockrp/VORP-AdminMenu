@@ -32,7 +32,7 @@ namespace vorpadminmenu_cl
             {
                 Menus.MainMenu.GetMenu();
                 TeleportsFunctions.SetupTeleports();
-                NotificationFunctions.SetupNotifications();
+                //NotificationFunctions.SetupNotifications();
                 BoosterFunctions.SetupBoosters();
                 AdministrationFunctions.SetupAdministration();
                 DatabaseFunctions.SetupDatabase();
