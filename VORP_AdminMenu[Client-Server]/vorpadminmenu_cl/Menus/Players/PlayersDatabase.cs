@@ -61,7 +61,8 @@ namespace vorpadminmenu_cl.Menus.Players
             {
                 Enabled = true,
             });
-            playersOptionsDatabaseMenu.AddMenuItem(new MenuItem(GetConfig.Langs["AddXpTitle"], GetConfig.Langs["AddXpDesc"])
+            /*
+             * playersOptionsDatabaseMenu.AddMenuItem(new MenuItem(GetConfig.Langs["AddXpTitle"], GetConfig.Langs["AddXpDesc"])
             {
                 Enabled = true,
             });
@@ -69,6 +70,7 @@ namespace vorpadminmenu_cl.Menus.Players
             {
                 Enabled = true,
             });
+            */
             playersOptionsDatabaseMenu.AddMenuItem(new MenuItem(GetConfig.Langs["AddItemTitle"], GetConfig.Langs["AddItemDesc"])
             {
                 Enabled = true,
@@ -114,6 +116,7 @@ namespace vorpadminmenu_cl.Menus.Players
                     DatabaseFunctions.RemoveMoney(MainMenu.args);
                     MainMenu.args.Clear();
                 }
+                /*
                 else if (_index == 2)
                 {
                     MainMenu.args.Add(API.GetPlayerServerId(idPlayers.ElementAt(indexPlayer)));
@@ -130,7 +133,8 @@ namespace vorpadminmenu_cl.Menus.Players
                     DatabaseFunctions.RemoveXp(MainMenu.args);
                     MainMenu.args.Clear();
                 }
-                else if (_index == 4)
+                */
+                else if (_index == 2)
                 {
                     MainMenu.args.Add(API.GetPlayerServerId(idPlayers.ElementAt(indexPlayer)));
                     dynamic item = await UtilsFunctions.GetInput(GetConfig.Langs["ItemName"], GetConfig.Langs["ItemName"]);
@@ -140,7 +144,7 @@ namespace vorpadminmenu_cl.Menus.Players
                     DatabaseFunctions.AddItem(MainMenu.args);
                     MainMenu.args.Clear();
                 }
-                else if (_index == 5)
+                else if (_index == 3)
                 {
                     MainMenu.args.Add(API.GetPlayerServerId(idPlayers.ElementAt(indexPlayer)));
                     dynamic weaponName = await UtilsFunctions.GetInput(GetConfig.Langs["WeaponName"], GetConfig.Langs["WeaponName"]);
