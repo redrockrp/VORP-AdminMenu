@@ -35,7 +35,6 @@ namespace vorpadminmenu_cl.Menus
             if (setupDone) return;
             setupDone = true;
             MenuController.AddMenu(boostersMenu);
-
             boostersMenu.AddMenuItem(new MenuItem(GetConfig.Langs["GoldenTitle"], GetConfig.Langs["GoldenDesc"])
             {
                 Enabled = true,
@@ -98,17 +97,20 @@ namespace vorpadminmenu_cl.Menus
                 }
             };
 
-                boostersMenu.OnCheckboxChange += (_menu, _item, _index, _checked) =>
+            boostersMenu.OnCheckboxChange += (_menu, _item, _index, _checked) =>
             {
+                List<object> list = new List<object>();
                 if (_index == 3)
                 {
-                    BoosterFunctions.SetClip(_checked);
+                    //BoosterFunctions.SetClip(_checked, false);
                     if (_checked) { mclip.Checked = false; };
+                    BoosterFunctions.Noclip(list);  
                 }
                 else if (_index == 4)
                 {
-                    BoosterFunctions.SetClip(_checked);
+                    //BoosterFunctions.SetClip(false, _checked);
                     if (_checked) { nclip.Checked = false; };
+                    BoosterFunctions.Noclip2(list);
                 }
             };
 
@@ -146,6 +148,7 @@ namespace vorpadminmenu_cl.Menus
 
         public static void Setnclip(bool nClip)
         {
+            Debug.WriteLine($"Set nclip {nClip}");
             nclip.Checked = nClip;
             mclip.Checked = false;
         }
@@ -157,6 +160,7 @@ namespace vorpadminmenu_cl.Menus
 
         public static void Setmclip(bool mClip)
         {
+            Debug.WriteLine($"Set nclip {mclip}");
             mclip.Checked = mClip;
             nclip.Checked = false;
         }

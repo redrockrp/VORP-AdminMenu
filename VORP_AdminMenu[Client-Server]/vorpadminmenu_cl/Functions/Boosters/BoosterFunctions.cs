@@ -132,7 +132,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
             }
         }
 
-        public static void SetClip(bool active)
+        public static void SetClip(bool active, bool passive)
         {
             int playerPed = API.PlayerPedId();
             heading = API.GetEntityHeading(playerPed);
@@ -149,22 +149,20 @@ namespace vorpadminmenu_cl.Functions.Boosters
 
         public static void Noclip(List<object> args)
         {
-
-
             int playerPed = API.PlayerPedId();
             heading = API.GetEntityHeading(playerPed);
-
-            if (!Menus.Boosters.Getnclip())
+            
+            if (Menus.Boosters.Getnclip())
             {
                 API.FreezeEntityPosition(playerPed, true);
                 API.SetEntityVisible(playerPed, false);
-                Menus.Boosters.Setnclip(true);
+                //Menus.Boosters.Setnclip(true);
             }
             else
             {
                 API.SetEntityVisible(playerPed, true);
                 API.FreezeEntityPosition(playerPed, false);
-                Menus.Boosters.Setnclip(false);
+                //Menus.Boosters.Setnclip(false);
             }
         }
 
@@ -223,6 +221,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
 
                     if (API.IsControlPressed(0, 0x6319DB71)) //UP
                     {
+                        Debug.WriteLine(speed.ToString());
                         if (speed > 0.5F)
                         {
                             speed = speed + 0.5F;
@@ -230,6 +229,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
                     }
                     if (API.IsControlPressed(0, 0x05CA7C52)) //DOWN
                     {
+                        Debug.WriteLine(speed.ToString());
                         if (speed > 0.5)
                         {
                             speed = speed - 0.5F;
@@ -249,19 +249,19 @@ namespace vorpadminmenu_cl.Functions.Boosters
             int playerPed = API.PlayerPedId();
             heading = API.GetEntityHeading(playerPed);
 
-            if (!Menus.Boosters.Getmclip())
+            if (Menus.Boosters.Getmclip())
             {
-                API.FreezeEntityPosition(playerPed, true);
+              API.FreezeEntityPosition(playerPed, true);
                 Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
                 API.SetEntityVisible(playerPed, false);
-                Menus.Boosters.Setmclip(true);
+                //Menus.Boosters.Setmclip(true);
             }
             else
             {
                 API.SetEntityVisible(playerPed, true);
                 API.FreezeEntityPosition(playerPed, false);
                 Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
-                Menus.Boosters.Setmclip(false);
+                //Menus.Boosters.Setmclip(false);
             }
         }
 
@@ -318,6 +318,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
 
                     if (API.IsControlPressed(0, 0xCEFD9220)) //E-more speed
                     {
+                        Debug.WriteLine(speed.ToString());
                         if (speed > 0.5F)
                         {
                             speed = speed + 0.5F;
@@ -325,6 +326,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
                     }
                     if (API.IsControlPressed(0, 0xDE794E3E)) //Q-less speed
                     {
+                        Debug.WriteLine(speed.ToString());
                         if (speed > 0.5)
                         {
                             speed = speed - 0.5F;
@@ -332,6 +334,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
                     }
                     if (API.IsControlPressed(0, 0x8CC9CD42)) //X-default speed
                     {
+                        Debug.WriteLine(speed.ToString());
                         speed = 1.28F;
                     }
                     if (API.IsControlPressed(0, 0xB2F377E8)) //F-turn off noclip2
@@ -339,6 +342,11 @@ namespace vorpadminmenu_cl.Functions.Boosters
                         List<object> args = new List<object>();
                         Noclip2(args);
                     }
+                    /*if (API.IsControlJustReleased(0, 0x760A9C6F) && API.IsControlPressed(0, 137))
+                    {
+                        List<object> args = new List<object>();
+                        Noclip2(args);
+                    };*/
                     heading += API.GetGameplayCamRelativeHeading();
                 }
             }
