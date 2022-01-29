@@ -46,7 +46,7 @@ namespace vorpadminmenu_sv
 
         public void DeleteInDB()
         {
-            Exports["ghmattimysql"].execute($"DELETE FROM BANNEDS WHERE b_id=?", new[] { id });
+            Exports["ghmattimysql"].execute($"DELETE FROM banneds WHERE b_id=?", new[] { id });
         }
     }
 }

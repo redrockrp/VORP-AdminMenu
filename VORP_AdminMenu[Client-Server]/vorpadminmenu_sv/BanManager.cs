@@ -21,7 +21,7 @@ namespace vorpadminmenu_sv
 
         private async Task CheckBanneds()
         {
-            await Delay(300000); // 5 minutos
+            await Delay(15000); // 3.5 minute
             for (int i=0; i < userBanneds.Count(); i++)
             {
                 if (!userBanneds[i].Permanent)
