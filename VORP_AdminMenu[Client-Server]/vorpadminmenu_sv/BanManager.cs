@@ -10,9 +10,12 @@ namespace vorpadminmenu_sv
     public class BanManager : BaseScript
     {
         public static List<PlayerBanned> userBanneds = new List<PlayerBanned>();
+        PlayerList PlayersList;
 
         public BanManager()
         {
+            PlayersList = Players;
+
             EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
             EventHandlers["vorp_adminmenu:addNewBan"] += new Action<Player, int, string, string>(AddNewBan);
             LoadBannedsFromDB();
@@ -22,12 +25,12 @@ namespace vorpadminmenu_sv
         private async Task CheckBanneds()
         {
             await Delay(300000); // 5 minutos
-            for (int i=0; i < userBanneds.Count(); i++)
+            for (int i = 0; i < userBanneds.Count(); i++)
             {
                 if (!userBanneds[i].Permanent)
                 {
                     TimeSpan diff = (userBanneds[i].Unban - DateTime.Now);
-                    if(diff.TotalSeconds < 0)
+                    if (diff.TotalSeconds < 0)
                     {
                         userBanneds[i].DeleteInDB();
                         await Delay(100);
@@ -37,54 +40,49 @@ namespace vorpadminmenu_sv
             }
         }
 
-        private async void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
+        private async void OnPlayerConnecting([FromSource] Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
-            deferrals.defer();
-            await Delay(0);
-
-            string steam = player.Identifiers["steam"];
-            string license = player.Identifiers["license"];
-
-            if (userBanneds.Any(x => x.Steam.Contains(steam)))
+            try
             {
-                PlayerBanned userBan = userBanneds.FirstOrDefault(x=> x.Steam.Contains(steam));
+                deferrals.defer();
+                await Delay(0);
+
+                string steam = player.Identifiers["steam"];
+                string license = player.Identifiers["license"];
+
+                PlayerBanned userBan = userBanneds.Where(x => x.Steam == steam || x.License == license).FirstOrDefault();
+
+                if (userBan == null)
+                {
+                    deferrals.done();
+                    return;
+                }
+
                 if (userBan.Permanent)
                 {
                     deferrals.done(LoadConfig.Langs["YouArePermanentBanned"]);
                     setKickReason(LoadConfig.Langs["YouArePermanentBanned"]);
+                    return;
                 }
-                else
-                {
-                    TimeSpan diff = (userBan.Unban - DateTime.Now);
-                    deferrals.done(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
-                    setKickReason(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
-                }
-             
-            } else if (userBanneds.Any(x => x.License.Contains(license)))
-            {
-                PlayerBanned userBan = userBanneds.FirstOrDefault(x => x.License.Contains(license));
-                if (userBan.Permanent)
-                {
-                    deferrals.done(LoadConfig.Langs["YouArePermanentBanned"]);
-                    setKickReason(LoadConfig.Langs["YouArePermanentBanned"]);
-                }
-                else
-                {
-                    TimeSpan diff = (userBan.Unban - DateTime.Now);
-                    deferrals.done(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
-                    setKickReason(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
-                }
+                TimeSpan diff = (userBan.Unban - DateTime.Now);
+                deferrals.done(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
+                setKickReason(string.Format(LoadConfig.Langs["YouAreTempBanned"], diff.Days.ToString(), diff.Hours.ToString(), diff.Minutes.ToString()));
             }
-
-            deferrals.done();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ERROR] OnPlayerConnecting\n\r{ex}");
+            }
 
         }
 
-        public async void AddNewBan([FromSource]Player player, int targetId, string temp, string reason)
+        public async void AddNewBan([FromSource] Player player, int targetId, string temp, string reason)
         {
 
             DateTime banned = DateTime.Now;
-            Player target = getPlayerFromSource(targetId);
+            Player target = PlayersList[targetId];
+
+            if (target == null) return;
+
             string steam = "none";
             string license = "none";
             string discord = "none";
@@ -97,7 +95,8 @@ namespace vorpadminmenu_sv
                 if (identifier.Contains("steam:"))
                 {
                     steam = identifier;
-                }else if (identifier.Contains("license:"))
+                }
+                else if (identifier.Contains("license:"))
                 {
                     license = identifier;
                 }
@@ -187,13 +186,6 @@ namespace vorpadminmenu_sv
                 }
 
             }));
-        }
-
-        public static Player getPlayerFromSource(int handle)
-        {
-            PlayerList pl = new PlayerList();
-            Player p = pl[handle];
-            return p;
         }
     }
 }

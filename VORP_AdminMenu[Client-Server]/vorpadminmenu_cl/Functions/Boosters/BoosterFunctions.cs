@@ -1,4 +1,4 @@
-﻿using CitizenFX.Core;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace vorpadminmenu_cl.Functions.Boosters
         public static bool godmodeON = false;
         public static bool noclip = false;
         public static bool noclip2 = false;
-        float speed = 1.28F;
+        float speed = 1.0F;
 
         public static bool thorON = false;
         public BoosterFunctions()
@@ -119,15 +119,20 @@ namespace vorpadminmenu_cl.Functions.Boosters
 
         public static void GodMode(List<object> args)
         {
+            int playerPed = API.PlayerPedId();
 
             if (!Menus.Boosters.Getgmode())
             {
-                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
+                Function.Call(Hash.SET_ENTITY_INVINCIBLE, API.PlayerPedId(), false);
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerPedId(), false);
+                Debug.WriteLine("GM OFF");
                 Menus.Boosters.Setgmode(true);
             }
             else
             {
-                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
+                Function.Call(Hash.SET_ENTITY_INVINCIBLE, API.PlayerPedId(), true);
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerPedId(), true);
+                Debug.WriteLine("GM ON");
                 Menus.Boosters.Setgmode(false);
             }
         }
@@ -140,10 +145,12 @@ namespace vorpadminmenu_cl.Functions.Boosters
             if (active)
             {
                 API.FreezeEntityPosition(playerPed, true);
+                API.SetEntityVisible(playerPed, false);
             }
             else
             {
                 API.FreezeEntityPosition(playerPed, false);
+                API.SetEntityVisible(playerPed, true);
             }
         }
 
@@ -219,25 +226,38 @@ namespace vorpadminmenu_cl.Functions.Boosters
                         API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                     }
 
-                    if (API.IsControlPressed(0, 0x6319DB71)) //UP
+                    if (API.IsControlJustPressed(0, 0xDEB34313)) //RIGHT
                     {
                         Debug.WriteLine(speed.ToString());
-                        if (speed > 0.5F)
+                        speed = speed + 0.25F;
+                        TriggerEvent("vorp:TipBottom", string.Format($"Текущая скорость: {speed}"), 500);
+
+                        if (speed == 3.25F)
                         {
-                            speed = speed + 0.5F;
+                            speed = 1.0F;
+                            TriggerEvent("vorp:TipBottom", string.Format("Скорость не может быть больше 3"), 500);
+                            await Delay(800);
+                            TriggerEvent("vorp:TipBottom", string.Format("Текущая скорость: 1.0"), 500);
                         }
                     }
-                    if (API.IsControlPressed(0, 0x05CA7C52)) //DOWN
+                    if (API.IsControlJustPressed(0, 0xA65EBAB4)) //LEFT
                     {
                         Debug.WriteLine(speed.ToString());
-                        if (speed > 0.5)
+                        speed = speed - 0.25F;
+                        TriggerEvent("vorp:TipBottom", string.Format($"Текущая скорость: {speed}"), 500);
+
+                        if (speed == 0.00F)
                         {
-                            speed = speed - 0.5F;
+                            speed = 1.0F;
+                            TriggerEvent("vorp:TipBottom", string.Format("Скорость не может быть меньше 0"), 500);
+                            await Delay(800);
+                            TriggerEvent("vorp:TipBottom", string.Format("Текущая скорость: 1.0"), 500);
                         }
                     }
                     if (API.IsControlPressed(0, 0x9959A6F0)) //C
                     {
-                        speed = 1.28F;
+                        speed = 1.0F;
+                        TriggerEvent("vorp:TipBottom", string.Format("Скорость сброшена на 1.0"), 500);
                     }
                     heading += API.GetGameplayCamRelativeHeading();
                 }
@@ -316,26 +336,41 @@ namespace vorpadminmenu_cl.Functions.Boosters
                         API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                     }
 
-                    if (API.IsControlPressed(0, 0xCEFD9220)) //E-more speed
+                    if (API.IsControlJustPressed(0, 0xCEFD9220)) //E-more speed
                     {
                         Debug.WriteLine(speed.ToString());
-                        if (speed > 0.5F)
+
+                        speed = speed + 0.25F;
+                        TriggerEvent("vorp:TipBottom", string.Format($"Текущая скорость: {speed}"), 500);
+
+                        if (speed == 3.25F)
                         {
-                            speed = speed + 0.5F;
+                            speed = 1.0F;
+                            TriggerEvent("vorp:TipBottom", string.Format("Скорость не может быть больше 3"), 500);
+                            await Delay(800);
+                            TriggerEvent("vorp:TipBottom", string.Format("Текущая скорость: 1.0"), 500);
                         }
                     }
-                    if (API.IsControlPressed(0, 0xDE794E3E)) //Q-less speed
+                    if (API.IsControlJustPressed(0, 0xDE794E3E)) //Q-less speed
                     {
                         Debug.WriteLine(speed.ToString());
-                        if (speed > 0.5)
+
+                        speed = speed - 0.25F;
+                        TriggerEvent("vorp:TipBottom", string.Format($"Текущая скорость: {speed}"), 500);
+
+                        if (speed == 0.00F)
                         {
-                            speed = speed - 0.5F;
+                            speed = 1.0F;
+                            TriggerEvent("vorp:TipBottom", string.Format("Скорость не может быть меньше 0"), 500);
+                            await Delay(800);
+                            TriggerEvent("vorp:TipBottom", string.Format("Текущая скорость: 1.0"), 500);
                         }
                     }
                     if (API.IsControlPressed(0, 0x8CC9CD42)) //X-default speed
                     {
                         Debug.WriteLine(speed.ToString());
-                        speed = 1.28F;
+                        speed = 1.00F;
+                        TriggerEvent("vorp:TipBottom", string.Format("Скорость сброшена на 1.0"), 500);
                     }
                     if (API.IsControlPressed(0, 0xB2F377E8)) //F-turn off noclip2
                     {

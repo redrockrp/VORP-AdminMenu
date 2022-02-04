@@ -100,7 +100,12 @@ namespace vorpadminmenu_cl.Menus
             boostersMenu.OnCheckboxChange += (_menu, _item, _index, _checked) =>
             {
                 List<object> list = new List<object>();
-                if (_index == 3)
+                if (_index == 1)
+                {
+                    BoosterFunctions.GodMode(new List<object>());
+                    gmode.Checked = _checked;
+                }
+                else if (_index == 3)
                 {
                     //BoosterFunctions.SetClip(_checked, false);
                     if (_checked) { mclip.Checked = false; };
