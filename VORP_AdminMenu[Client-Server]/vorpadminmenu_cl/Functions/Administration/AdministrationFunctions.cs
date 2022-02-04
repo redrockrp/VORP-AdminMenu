@@ -3,9 +3,6 @@ using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using vorpadminmenu_cl.Functions.Utils;
 using Hash = CitizenFX.Core.Native.Hash;
@@ -185,16 +182,16 @@ namespace vorpadminmenu_cl.Functions.Administration
                     foreach (var i in API.GetActivePlayers())
                     {
                         int blip = API.GetBlipFromEntity(API.GetPlayerPed(i));
-                        if (!API.DoesBlipExist(blip))
-                        {
-                            await Delay(10);
-                            Vector3 coords = API.GetEntityCoords(API.GetPlayerPed(i), true, true);
-                            int _blip = Function.Call<int>((Hash)0x23F74C2FDA6E7C61, 1664425300, API.GetPlayerPed(i));
-                            Function.Call((Hash)0x74F74D3207ED525C, _blip, -1580514024, 1);
-                            Function.Call((Hash)0xD38744167B2FA257, _blip, 0.2F);
-                            Function.Call((Hash)0x9CB1A1623062F402, _blip, $"{API.GetPlayerName(i)} id: {API.GetPlayerServerId(i)}");
-                            blipsList.Add(_blip);
-                        }
+                            if (!API.DoesBlipExist(blip))
+                            {
+                                await Delay(10);
+                                Vector3 coords = API.GetEntityCoords(API.GetPlayerPed(i), true, true);
+                                int _blip = Function.Call<int>((Hash)0x23F74C2FDA6E7C61, 1664425300, API.GetPlayerPed(i));
+                                Function.Call((Hash)0x74F74D3207ED525C, _blip, -1580514024, 1);
+                                Function.Call((Hash)0xD38744167B2FA257, _blip, 0.2F);
+                                Function.Call((Hash)0x9CB1A1623062F402, _blip, $"{API.GetPlayerName(i)} id: {API.GetPlayerServerId(i)}");
+                                blipsList.Add(_blip);
+                            }
                     }
                     await Delay(10000);
                 }

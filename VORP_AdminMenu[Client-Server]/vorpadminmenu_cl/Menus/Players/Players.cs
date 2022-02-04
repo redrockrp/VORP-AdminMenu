@@ -28,19 +28,18 @@ namespace vorpadminmenu_cl.Menus.Players
                 idPlayers.Clear();
                 foreach (var i in API.GetActivePlayers())
                 {
-                    string name = API.GetPlayerName(i).ToString();
-                    string id = API.GetPlayerServerId(i).ToString();
-                    idPlayers.Add(i);
-                    MenuController.AddSubmenu(playersListMenu, playersOptionsMenu);
+                        string name = API.GetPlayerName(i).ToString();
+                        string id = API.GetPlayerServerId(i).ToString();
+                        idPlayers.Add(i);
+                        MenuController.AddSubmenu(playersListMenu, playersOptionsMenu);
 
-                    MenuItem playerNameButton = new MenuItem(name, $"{name},{id}")
-                    {
-                        RightIcon = MenuItem.Icon.ARROW_RIGHT
-                    };
-                    playersListMenu.AddMenuItem(playerNameButton);
-                    MenuController.BindMenuItem(playersListMenu, playersOptionsMenu, playerNameButton);
-                    
-                }
+                        MenuItem playerNameButton = new MenuItem(name, $"{name},{id}")
+                        {
+                            RightIcon = MenuItem.Icon.ARROW_RIGHT
+                        };
+                        playersListMenu.AddMenuItem(playerNameButton);
+                        MenuController.BindMenuItem(playersListMenu, playersOptionsMenu, playerNameButton);
+                    }
             };
 
             playersListMenu.OnItemSelect += (_menu, _item, _index) =>

@@ -9,9 +9,9 @@ namespace vorpadminmenu_sv
 {
     class TriggersServer : BaseScript
     {
-
         public TriggersServer()
         {
+
             EventHandlers["vorp:ownerCoordsToBring"] += new Action<Vector3, int>(CoordsToBringPlayer);
             EventHandlers["vorp:askCoordsToTPPlayerDestiny"] += new Action<Player, int>(CoordsToPlayerDestiny);
             EventHandlers["vorp:callbackCoords"] += new Action<string, Vector3>(CoordsToStart);
